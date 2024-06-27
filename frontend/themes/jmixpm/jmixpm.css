@@ -1,0 +1,28 @@
+/* Define your styles here */
+
+.dashboard-manager-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+.dashboard-manager-card {
+    position: relative;
+    border: 1px solid var(--lumo-contrast-5pct);
+    border-radius: var(--lumo-border-radius-l);
+}
+
+.dashboard-manager-card vaadin-icon {
+    color: var(--lumo-contrast-40pct);
+}
+
+.dashboard-manager-card span {
+    font-weight: bold;
+}
+
+.dashboard-manager-card span:last-child {
+    bottom: 1em;
+    right: 1em;
+    position: absolute;
+    font-size: x-large;
+    color: var(--lumo-primary-color-50pct);
+}

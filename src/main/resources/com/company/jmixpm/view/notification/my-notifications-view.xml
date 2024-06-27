@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="msg://myNotificationsView.title">
+    <data>
+        <collection id="notificationsDc" class="com.company.jmixpm.entity.Notification">
+            <fetchPlan extends="_base"/>
+            <loader id="notificationsDl">
+                <query>
+                    <![CDATA[select e from Notification e
+                        where e.recipient.id = :current_user_id
+                              and e.isRead = false]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+    <layout>
+        <hbox>
+            <button id="markAsReadBtn" action="notificationsDataGrid.markAsRead"/>
+        </hbox>
+        <dataGrid id="notificationsDataGrid" minHeight="20em" width="100%" dataContainer="notificationsDc">
+            <actions>
+                <action id="markAsRead" text="msg://notificationsTable.markAsRead.text" type="list_itemTracking"/>
+            </actions>
+            <columns resizable="true">
+                <column property="title"/>
+                <column property="text" flexGrow="2"/>
+            </columns>
+        </dataGrid>
+    </layout>
+</view>

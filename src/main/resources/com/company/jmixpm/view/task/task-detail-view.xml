@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="msg://taskDetailView.title"
+      focusComponent="form">
+    <data>
+        <instance id="taskDc"
+                  class="com.company.jmixpm.entity.Task">
+            <fetchPlan extends="_base">
+                <property name="assignee" fetchPlan="_base"/>
+                <property name="project" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader/>
+        </instance>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+    <actions>
+        <action id="saveAction" type="detail_saveClose"/>
+        <action id="closeAction" type="detail_close"/>
+    </actions>
+    <layout>
+        <formLayout id="form" dataContainer="taskDc">
+            <textField id="nameField" property="name"/>
+            <entityPicker id="assigneeField" property="assignee">
+                <actions>
+                    <action id="entityLookup" type="entity_lookup"/>
+                    <action id="entityClear" type="entity_clear"/>
+                </actions>
+            </entityPicker>
+            <dateTimePicker id="startDateField" property="startDate"/>
+            <textField id="estimatedEffortsField" property="estimatedEfforts"/>
+            <entityPicker id="projectField" property="project">
+                <actions>
+                    <action id="entityLookup" type="entity_lookup"/>
+                    <action id="entityClear" type="entity_clear"/>
+                </actions>
+            </entityPicker>
+        </formLayout>
+        <hbox id="detailActions">
+            <button id="saveAndCloseBtn" action="saveAction"/>
+            <button id="closeBtn" action="closeAction"/>
+        </hbox>
+    </layout>
+</view>

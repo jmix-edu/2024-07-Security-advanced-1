@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="msg://userActivationView.title">
+    <layout justifyContent="CENTER" alignItems="CENTER" classNames="jmix-login-main-layout">
+        <vbox id="registrationFormWrapper" width="26.5em" alignItems="CENTER"
+              classNames="registration-form-layout">
+            <h2 text="User activation"/>
+            <h3 id="notFoundHeader" text="msg://notFoundHeader.text"/>
+            <h3 id="welcomeHeader" text="msg://welcomeHeader.text"/>
+            <formLayout id="form">
+                <passwordField id="passwordField" label="msg://passwordField.label" required="true">
+                    <validators>
+                        <size min="4" message="msg://passwordField.size.message"/>
+                    </validators>
+                </passwordField>
+            </formLayout>
+            <button id="activateBtn" text="msg://activateBtn.text" themeNames="primary" width="100%"/>
+            <button id="returnToLoginBtn" text="msg://returnToLoginBtn.text" themeNames="primary" width="100%"/>
+        </vbox>
+    </layout>
+</view>

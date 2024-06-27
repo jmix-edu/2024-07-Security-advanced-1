@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="msg://quickAddTimeEntryDialog.title">
+    <data>
+        <instance id="timeEntryDc" class="com.company.jmixpm.entity.TimeEntry">
+            <fetchPlan extends="_base">
+                <property name="task" fetchPlan="_base"/>
+                <property name="assignee" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="timeEntryDl"/>
+        </instance>
+    </data>
+    <layout>
+        <formLayout id="timeEntryForm" dataContainer="timeEntryDc">
+            <entityPicker id="taskField" property="task">
+                <actions>
+                    <action id="entityLookup" type="entity_lookup"/>
+                    <action id="entityClear" type="entity_clear"/>
+                </actions>
+            </entityPicker>
+            <entityPicker id="assigneeField" property="assignee">
+                <actions>
+                    <action id="entityLookup" type="entity_lookup"/>
+                    <action id="entityClear" type="entity_clear"/>
+                </actions>
+            </entityPicker>
+            <dateTimePicker id="entryDateField" property="entryDate"/>
+            <textField id="timeSpentField" property="timeSpent"/>
+            <textArea id="descriptionField" property="description" minHeight="2em"/>
+            <responsiveSteps>
+                <responsiveStep minWidth="0" columns="1"/>
+            </responsiveSteps>
+        </formLayout>
+        <button id="saveBtn" text="msg://saveBtn.text" icon="CHECK"/>
+    </layout>
+</view>

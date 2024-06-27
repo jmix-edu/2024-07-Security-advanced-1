@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view" xmlns:charts="http://jmix.io/schema/charts/ui"
+      title="msg://projectsDashboard.title">
+    <data>
+        <collection id="dashboardProjectsDc"
+                    class="com.company.jmixpm.entity.dashboard.DashboardProject">
+            <loader id="dashboardProjectsDl" readOnly="true"/>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+    <layout>
+        <hbox width="100%" height="100%" padding="false">
+            <charts:chart id="projectsCompletenessChart"
+                          width="100%"
+                          height="100%">
+                <charts:xAxes>
+                    <charts:xAxis/>
+                </charts:xAxes>
+                <charts:yAxes>
+                    <charts:yAxis max="100" min="0">
+                        <charts:axisLabel formatter="{value} %"/>
+                    </charts:yAxis>
+                </charts:yAxes>
+                <charts:dataSet>
+                    <charts:source dataContainer="dashboardProjectsDc"
+                                   categoryField="name" valueFields="completeness"/>
+                </charts:dataSet>
+                <charts:series>
+                    <charts:bar name="Project completeness" colorBy="DATA"/>
+                </charts:series>
+                <charts:legend/>
+            </charts:chart>
+            <charts:chart id="taskCompletenessChart" width="100%" height="100%">
+                <charts:dataSet>
+                    <charts:source dataContainer="dashboardProjectsDc"
+                                   categoryField="name"
+                                   valueFields="plannedEfforts, actualEfforts"/>
+                </charts:dataSet>
+                <charts:xAxes>
+                    <charts:xAxis/>
+                </charts:xAxes>
+                <charts:yAxes>
+                    <charts:yAxis>
+                        <charts:axisLabel formatter="{value} hours"/>
+                    </charts:yAxis>
+                </charts:yAxes>
+                <charts:series>
+                    <charts:bar name="Planned efforts"/>
+                    <charts:bar name="Actual efforts"/>
+                </charts:series>
+                <charts:legend/>
+            </charts:chart>
+        </hbox>
+        <div id="managerCardsContainer" width="100%" classNames="dashboard-manager-container"/>
+    </layout>
+</view>
