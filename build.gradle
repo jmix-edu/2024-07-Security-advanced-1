@@ -51,6 +51,8 @@ dependencies {
     implementation 'org.postgresql:postgresql'
     implementation 'io.jmix.audit:jmix-audit-flowui-starter'
     implementation 'io.jmix.audit:jmix-audit-starter'
+    implementation 'io.jmix.ldap:jmix-ldap-starter'
+    implementation 'io.jmix.jmxconsole:jmix-jmxconsole-starter'
 }
 
 test {
