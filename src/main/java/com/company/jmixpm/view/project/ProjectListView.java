@@ -2,9 +2,11 @@ package com.company.jmixpm.view.project;
 
 import com.company.jmixpm.entity.Project;
 
+import com.company.jmixpm.security.specific.JmixPmProjectArchive;
 import com.company.jmixpm.view.main.MainView;
 
 import com.vaadin.flow.router.Route;
+import io.jmix.core.AccessManager;
 import io.jmix.core.DataManager;
 import io.jmix.flowui.Notifications;
 import io.jmix.flowui.component.grid.DataGrid;
@@ -19,17 +21,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 @LookupComponent("projectsDataGrid")
 @DialogMode(width = "64em")
 public class ProjectListView extends StandardListView<Project> {
+
     @ViewComponent
     private CollectionLoader<Project> projectsDl;
     @ViewComponent
     private DataGrid<Project> projectsDataGrid;
-
     @Autowired
     private DataManager dataManager;
+
     @Autowired
     private Notifications notifications;
-
     private boolean hideArchived;
+    @Autowired
+    private AccessManager accessManager;
+
+    @Install(to = "projectsDataGrid.archive", subject = "enabledRule")
+    private boolean projectsDataGridArchiveEnabledRule() {
+        JmixPmProjectArchive context = new JmixPmProjectArchive();
+        accessManager.applyRegisteredConstraints(context);
+        return context.isPermitted();
+    }
 
     @Subscribe
     public void onBeforeShow(BeforeShowEvent event) {

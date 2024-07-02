@@ -1,6 +1,8 @@
 package com.company.jmixpm.view.login;
 
+import com.company.jmixpm.view.public_.register.UserRegistrationView;
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.login.AbstractLogin;
 import com.vaadin.flow.component.login.AbstractLogin.LoginEvent;
 import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
@@ -10,6 +12,7 @@ import com.vaadin.flow.server.VaadinSession;
 import io.jmix.core.CoreProperties;
 import io.jmix.core.MessageTools;
 import io.jmix.core.security.AccessDeniedException;
+import io.jmix.flowui.ViewNavigators;
 import io.jmix.flowui.component.loginform.JmixLoginForm;
 import io.jmix.flowui.kit.component.ComponentUtils;
 import io.jmix.flowui.kit.component.loginform.JmixLoginI18n;
@@ -21,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
@@ -56,6 +60,8 @@ public class LoginView extends StandardView implements LocaleChangeObserver {
 
     @Value("${ui.login.defaultPassword:}")
     private String defaultPassword;
+    @Autowired
+    private ViewNavigators viewNavigators;
 
     @Subscribe
     public void onInit(final InitEvent event) {
@@ -91,10 +97,25 @@ public class LoginView extends StandardView implements LocaleChangeObserver {
                             .withLocale(login.getSelectedLocale())
                             .withRememberMe(login.isRememberMe())
             );
-        } catch (final BadCredentialsException | DisabledException | LockedException | AccessDeniedException e) {
+        } catch (final BadCredentialsException | DisabledException | LockedException | AccessDeniedException |
+                       AccountExpiredException e) {
+            if (e instanceof AccountExpiredException) {
+                JmixLoginI18n loginI18n = createLoginI18n();
+                loginI18n.getErrorMessage().setMessage(e.getMessage());
+                login.setI18n(loginI18n);
+            } else {
+                login.setI18n(createLoginI18n());
+            }
             log.warn("Login failed for user '{}': {}", event.getUsername(), e.toString());
             event.getSource().setError(true);
         }
+    }
+
+    private JmixLoginI18n createLoginI18n() {
+
+        final JmixLoginI18n loginI18n = JmixLoginI18n.createDefault();
+        // ...
+        return loginI18n;
     }
 
     @Override
@@ -120,5 +141,11 @@ public class LoginView extends StandardView implements LocaleChangeObserver {
         loginI18n.setErrorMessage(errorMessage);
 
         login.setI18n(loginI18n);
+    }
+
+    @Subscribe("login")
+    public void onLoginForgotPassword(final AbstractLogin.ForgotPasswordEvent event) {
+        viewNavigators.view(UserRegistrationView.class)
+                .navigate();
     }
 }

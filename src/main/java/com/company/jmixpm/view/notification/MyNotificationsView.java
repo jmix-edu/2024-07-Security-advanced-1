@@ -1,6 +1,7 @@
 package com.company.jmixpm.view.notification;
 
 
+import com.company.jmixpm.app.NotificationService;
 import com.company.jmixpm.entity.Notification;
 import com.company.jmixpm.entity.User;
 import com.company.jmixpm.view.main.MainView;
@@ -25,6 +26,8 @@ public class MyNotificationsView extends StandardView {
 
     @Autowired
     private DataManager dataManager;
+    @Autowired
+    private NotificationService notificationService;
 
     @Subscribe("notificationsDataGrid.markAsRead")
     public void onNotificationsTableMarkAsRead(ActionPerformedEvent event) {
@@ -33,11 +36,14 @@ public class MyNotificationsView extends StandardView {
         if (item == null) {
             return;
         }
+//
+//        // set isRead
+//        item.setIsRead(true);
+//        // save changes
+//        dataManager.save(item);
 
-        // set isRead
-        item.setIsRead(true);
-        // save changes
-        dataManager.save(item);
+//        notificationService.markAsReadWithUnconstrainedDM(item);
+          notificationService.markAsReadWithEntityManager(item);
 
         // reload the table
         notificationsDl.load();

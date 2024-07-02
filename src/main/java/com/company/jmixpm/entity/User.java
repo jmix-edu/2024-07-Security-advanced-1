@@ -14,6 +14,7 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.security.core.GrantedAuthority;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.Collections;
@@ -73,8 +74,19 @@ public class User implements JmixUserDetails, HasTimeZone {
     @Column(name = "CREATED_DATE")
     private OffsetDateTime createdDate;
 
+    @Column(name = "EXPIRY_DATE")
+    private LocalDate expiryDate;
+
     @Transient
     protected Collection<? extends GrantedAuthority> authorities;
+
+    public LocalDate getExpiryDate() {
+        return expiryDate;
+    }
+
+    public void setExpiryDate(LocalDate expiryDate) {
+        this.expiryDate = expiryDate;
+    }
 
     public UUID getId() {
         return id;
@@ -185,7 +197,8 @@ public class User implements JmixUserDetails, HasTimeZone {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        LocalDate now = LocalDate.now();
+        return expiryDate == null || !now.isAfter(expiryDate);
     }
 
     @Override

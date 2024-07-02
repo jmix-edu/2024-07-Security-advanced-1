@@ -9,6 +9,7 @@ import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import io.jmix.core.LoadContext;
 import io.jmix.flowui.UiComponents;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@AnonymousAllowed
 @Route(value = "projects-dashboard")
 @ViewController("ProjectsDashboardView")
 @ViewDescriptor("projects-dashboard.xml")

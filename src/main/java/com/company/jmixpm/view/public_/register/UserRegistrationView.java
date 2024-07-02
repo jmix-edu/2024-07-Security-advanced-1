@@ -3,11 +3,14 @@ package com.company.jmixpm.view.public_.register;
 import com.company.jmixpm.app.RegistrationService;
 import com.company.jmixpm.entity.User;
 
+import com.company.jmixpm.view.login.LoginView;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.auth.AnonymousAllowed;
 import io.jmix.email.EmailException;
 import io.jmix.flowui.Notifications;
+import io.jmix.flowui.ViewNavigators;
 import io.jmix.flowui.component.textfield.TypedTextField;
 import io.jmix.flowui.component.validation.ValidationErrors;
 import io.jmix.flowui.kit.component.button.JmixButton;
@@ -16,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+@AnonymousAllowed
 @Route(value = "register")
 @ViewController("UserRegistrationView")
 @ViewDescriptor("user-registration-view.xml")
@@ -39,6 +43,8 @@ public class UserRegistrationView extends StandardView {
     private TypedTextField<String> lastNameField;
     @ViewComponent
     private JmixButton registerBtn;
+    @Autowired
+    private ViewNavigators viewNavigators;
 
     @Subscribe(id = "registerBtn", subject = "clickListener")
     public void onRegisterBtnClick(final ClickEvent<JmixButton> event) {
@@ -70,7 +76,8 @@ public class UserRegistrationView extends StandardView {
 
     @Subscribe(id = "backToLoginBtn", subject = "clickListener")
     public void onBackToLoginBtnClick(final ClickEvent<JmixButton> event) {
-        // todo go to login view
+        viewNavigators.view(LoginView.class)
+                .navigate();
     }
 
     private boolean validateFields() {

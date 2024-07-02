@@ -5,7 +5,7 @@
     <layout justifyContent="CENTER" alignItems="CENTER" classNames="jmix-login-main-layout">
         <loginForm id="login"
                    rememberMeVisible="true"
-                   forgotPasswordButtonVisible="false">
+                   forgotPasswordButtonVisible="true">
             <form title="msg://loginForm.headerTitle"
                   username="msg://loginForm.username"
                   password="msg://loginForm.password"

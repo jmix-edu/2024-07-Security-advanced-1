@@ -1,9 +1,6 @@
 package com.company.jmixpm.security;
 
-import com.company.jmixpm.entity.Notification;
-import com.company.jmixpm.entity.Task;
-import com.company.jmixpm.entity.TimeEntry;
-import com.company.jmixpm.entity.User;
+import com.company.jmixpm.entity.*;
 import io.jmix.security.model.EntityAttributePolicyAction;
 import io.jmix.security.model.EntityPolicyAction;
 import io.jmix.security.role.annotation.EntityAttributePolicy;
@@ -18,7 +15,7 @@ public interface DeveloperRole extends UiMinimalRole {
     String CODE = "developer";
 
     @MenuPolicy(menuIds = {"Task_.list", "MyNotifications", "TimeEntry.list"})
-    @ViewPolicy(viewIds = {"Task_.list", "MyNotifications", "TimeEntry.list", "QuickAddTimeEntry", "TimeEntry.detail", "Task_.detail", "User.list"}, viewClasses = {})
+    @ViewPolicy(viewIds = {"Task_.list", "MyNotifications", "TimeEntry.list", "QuickAddTimeEntry", "TimeEntry.detail", "Task_.detail", "User.list"})
     void screens();
 
     @EntityAttributePolicy(entityClass = Notification.class, attributes = "*", action = EntityAttributePolicyAction.VIEW)
@@ -36,4 +33,8 @@ public interface DeveloperRole extends UiMinimalRole {
     @EntityPolicy(entityClass = User.class, actions = EntityPolicyAction.READ)
     @EntityAttributePolicy(entityClass = User.class, attributes = {"username", "firstName", "lastName", "email", "id", "version"}, action = EntityAttributePolicyAction.VIEW)
     void user();
+
+    @EntityAttributePolicy(entityClass = Document.class, attributes = "*", action = EntityAttributePolicyAction.MODIFY)
+    @EntityPolicy(entityClass = Document.class, actions = EntityPolicyAction.ALL)
+    void document();
 }

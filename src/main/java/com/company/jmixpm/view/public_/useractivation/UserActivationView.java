@@ -2,6 +2,7 @@ package com.company.jmixpm.view.public_.useractivation;
 
 import com.company.jmixpm.app.RegistrationService;
 import com.company.jmixpm.entity.User;
+import com.company.jmixpm.security.DatabaseUserRepository;
 import com.company.jmixpm.view.login.LoginView;
 import com.company.jmixpm.view.main.MainView;
 
@@ -11,22 +12,32 @@ import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinServletRequest;
 import com.vaadin.flow.server.VaadinServletResponse;
+import com.vaadin.flow.server.auth.AnonymousAllowed;
+import io.jmix.core.security.AccessDeniedException;
 import io.jmix.core.security.SecurityContextHelper;
+import io.jmix.core.security.SystemAuthenticationToken;
+import io.jmix.core.security.UserRepository;
 import io.jmix.flowui.Notifications;
 import io.jmix.flowui.ViewNavigators;
 import io.jmix.flowui.component.textfield.JmixPasswordField;
 import io.jmix.flowui.component.validation.ValidationErrors;
 import io.jmix.flowui.kit.component.button.JmixButton;
 import io.jmix.flowui.view.*;
+import io.jmix.securityflowui.authentication.AuthDetails;
 import io.jmix.securityflowui.authentication.LoginViewSupport;
 import io.micrometer.core.instrument.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 
+@AnonymousAllowed
 @Route(value = "activate")
 @ViewController("UserActivationView")
 @ViewDescriptor("user-activation-view.xml")
@@ -65,6 +76,8 @@ public class UserActivationView extends StandardView {
 
     private User user;
     private boolean initialized = false;
+    @Autowired
+    private UserRepository userRepository;
 
     @Subscribe
     public void onQueryParametersChange(final QueryParametersChangeEvent event) {
@@ -109,7 +122,15 @@ public class UserActivationView extends StandardView {
     }
 
     private void loginByPassword(String password) {
-        // todo login with password
+        try {
+            loginViewSupport.authenticate(
+                    AuthDetails.of(user.getUsername(), password));
+        } catch (final BadCredentialsException | DisabledException | LockedException | AccessDeniedException e) {
+            log.warn("Login failed for user '{}': {}",user.getUsername(), e.toString());
+            notifications.create("activation failed")
+                    .withType(Notifications.Type.ERROR)
+                    .show();
+        }
     }
 
     // mostly copied from io.jmix.securityui.authentication.LoginScreenSupport
@@ -117,7 +138,19 @@ public class UserActivationView extends StandardView {
         log.info("Login without password");
 
         // todo login without password
-        Authentication authentication = null;
+
+        user = (User) userRepository.loadUserByUsername(user.getUsername());
+
+        Authentication authentication = new SystemAuthenticationToken(user, user.getAuthorities());
+
+        try {
+            authenticationManager.authenticate(authentication);
+        } catch (AuthenticationException e) {
+
+            notifications.create("activation failed")
+                    .withType(Notifications.Type.ERROR)
+                    .show();
+        }
 
         VaadinServletRequest request = VaadinServletRequest.getCurrent();
         VaadinServletResponse response = VaadinServletResponse.getCurrent();
