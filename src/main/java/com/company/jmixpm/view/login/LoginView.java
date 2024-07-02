@@ -1,6 +1,7 @@
 package com.company.jmixpm.view.login;
 
 import com.company.jmixpm.view.public_.register.UserRegistrationView;
+import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.login.AbstractLogin;
 import com.vaadin.flow.component.login.AbstractLogin.LoginEvent;
@@ -12,9 +13,11 @@ import com.vaadin.flow.server.VaadinSession;
 import io.jmix.core.CoreProperties;
 import io.jmix.core.MessageTools;
 import io.jmix.core.security.AccessDeniedException;
+import io.jmix.flowui.Notifications;
 import io.jmix.flowui.ViewNavigators;
 import io.jmix.flowui.component.loginform.JmixLoginForm;
 import io.jmix.flowui.kit.component.ComponentUtils;
+import io.jmix.flowui.kit.component.button.JmixButton;
 import io.jmix.flowui.kit.component.loginform.JmixLoginI18n;
 import io.jmix.flowui.view.*;
 import io.jmix.securityflowui.authentication.AuthDetails;
@@ -62,6 +65,8 @@ public class LoginView extends StandardView implements LocaleChangeObserver {
     private String defaultPassword;
     @Autowired
     private ViewNavigators viewNavigators;
+    @Autowired
+    private Notifications notifications;
 
     @Subscribe
     public void onInit(final InitEvent event) {
@@ -148,4 +153,9 @@ public class LoginView extends StandardView implements LocaleChangeObserver {
         viewNavigators.view(UserRegistrationView.class)
                 .navigate();
     }
+
+//    @Subscribe(id = "customBtn", subject = "clickListener")
+//    public void onCustomBtnClick(final ClickEvent<JmixButton> event) {
+//        notifications.show("Clicked!");
+//    }
 }

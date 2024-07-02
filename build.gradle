@@ -49,6 +49,8 @@ dependencies {
     implementation 'io.jmix.quartz:jmix-quartz-starter'
     implementation 'io.jmix.quartz:jmix-quartz-flowui-starter'
     implementation 'org.postgresql:postgresql'
+    implementation 'io.jmix.audit:jmix-audit-flowui-starter'
+    implementation 'io.jmix.audit:jmix-audit-starter'
 }
 
 test {
